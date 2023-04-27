@@ -264,7 +264,7 @@ export const defToOperations = (
     ? get(def)
     : isOperation(def)
     ? def
-    : (_options: Options) => identity;
+    : (_options) => identity;
 
 export function defToOperation(def?: TransformDefinition): Operation {
   const operations = Array.isArray(def) ? def : defToOperations(def);

@@ -62,7 +62,7 @@ export interface StateMapper {
 }
 
 export interface Operation {
-  (options: Options): (next: StateMapper) => StateMapper
+  (options): (next) => StateMapper
 }
 
 // Transformer types
