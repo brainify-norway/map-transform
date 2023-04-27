@@ -5,7 +5,7 @@ import mapTransform, { set, ifelse } from '../index.js'
 // Tests
 
 test('should map with ifelse', (t) => {
-  const isPublished = (data: unknown) => isObject(data) && !!data.published
+  const isPublished = (data: unknown) => isObject(data) && !!data.published;
   const def = [
     'content.article',
     {
@@ -13,7 +13,7 @@ test('should map with ifelse', (t) => {
       published: 'published',
     },
     ifelse(isPublished, set('articles[]'), set('drafts[]')),
-  ]
+  ];
   const data = {
     content: {
       article: {
@@ -21,13 +21,13 @@ test('should map with ifelse', (t) => {
         published: false,
       },
     },
-  }
-  const expected = { drafts: [{ title: 'Heading 1', published: false }] }
+  };
+  const expected = { drafts: [{ title: 'Heading 1', published: false }] };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should run `then` pipeline when transform returns true', (t) => {
   const def = [
@@ -37,16 +37,16 @@ test('should run `then` pipeline when transform returns true', (t) => {
       then: { title: 'heading' },
       else: { title: 'title' },
     },
-  ]
+  ];
   const data = {
     content: { heading: 'The heading', title: 'The title', section: 'news' },
-  }
-  const expected = { title: 'The heading' }
+  };
+  const expected = { title: 'The heading' };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should run `else` pipeline when transform returns false', (t) => {
   const def = [
@@ -56,16 +56,16 @@ test('should run `else` pipeline when transform returns false', (t) => {
       then: { title: 'heading' },
       else: { title: 'title' },
     },
-  ]
+  ];
   const data = {
     content: { heading: 'The heading', title: 'The title', section: 'sports' },
-  }
-  const expected = { title: 'The title' }
+  };
+  const expected = { title: 'The title' };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should run $if deeper in the structure', (t) => {
   const def = [
@@ -79,16 +79,16 @@ test('should run $if deeper in the structure', (t) => {
         },
       },
     },
-  ]
+  ];
   const data = {
     content: { heading: 'The heading', title: 'The title', section: 'news' },
-  }
-  const expected = { articles: [{ title: 'The heading' }] }
+  };
+  const expected = { articles: [{ title: 'The heading' }] };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should support $and - matching', (t) => {
   const def = [
@@ -103,7 +103,7 @@ test('should support $and - matching', (t) => {
       then: { title: 'heading' },
       else: { title: 'title' },
     },
-  ]
+  ];
   const data = {
     content: {
       heading: 'The heading',
@@ -111,13 +111,13 @@ test('should support $and - matching', (t) => {
       section: 'news',
       archived: false,
     },
-  }
-  const expected = { title: 'The heading' }
+  };
+  const expected = { title: 'The heading' };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should support $and - not matching', (t) => {
   const def = [
@@ -132,7 +132,7 @@ test('should support $and - not matching', (t) => {
       then: { title: 'heading' },
       else: { title: 'title' },
     },
-  ]
+  ];
   const data = {
     content: {
       heading: 'The heading',
@@ -140,13 +140,13 @@ test('should support $and - not matching', (t) => {
       section: 'news',
       archived: false,
     },
-  }
-  const expected = { title: 'The title' }
+  };
+  const expected = { title: 'The title' };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should support $and - matching in reverse', (t) => {
   const def = [
@@ -161,23 +161,23 @@ test('should support $and - matching in reverse', (t) => {
       then: { heading: 'heading' },
       else: { heading: 'title' },
     },
-  ]
+  ];
   const data = {
     title: 'The title',
     heading: 'The heading',
     section: 'news',
     archived: false,
-  }
+  };
   const expected = {
     content: {
       heading: 'The heading',
     },
-  }
+  };
 
-  const ret = mapTransform(def)(data, { rev: true })
+  const ret = mapTransform(def)(data, { rev: true });
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should support $and - not matching in reverse', (t) => {
   const def = [
@@ -192,23 +192,23 @@ test('should support $and - not matching in reverse', (t) => {
       then: { heading: 'heading' },
       else: { heading: 'title' },
     },
-  ]
+  ];
   const data = {
     title: 'The title',
     heading: 'The heading',
     section: 'news',
     archived: false,
-  }
+  };
   const expected = {
     content: {
       title: 'The heading',
     },
-  }
+  };
 
-  const ret = mapTransform(def)(data, { rev: true })
+  const ret = mapTransform(def)(data, { rev: true });
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should support $or - matching', (t) => {
   const def = [
@@ -223,7 +223,7 @@ test('should support $or - matching', (t) => {
       then: { title: 'heading' },
       else: { title: 'title' },
     },
-  ]
+  ];
   const data = {
     content: {
       heading: 'The heading',
@@ -231,13 +231,13 @@ test('should support $or - matching', (t) => {
       section: 'news',
       archived: false,
     },
-  }
-  const expected = { title: 'The heading' }
+  };
+  const expected = { title: 'The heading' };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should support $or - not matching', (t) => {
   const def = [
@@ -252,7 +252,7 @@ test('should support $or - not matching', (t) => {
       then: { title: 'heading' },
       else: { title: 'title' },
     },
-  ]
+  ];
   const data = {
     content: {
       heading: 'The heading',
@@ -260,13 +260,13 @@ test('should support $or - not matching', (t) => {
       section: 'sports',
       archived: false,
     },
-  }
-  const expected = { title: 'The title' }
+  };
+  const expected = { title: 'The title' };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should support $not', (t) => {
   const def = [
@@ -278,7 +278,7 @@ test('should support $not', (t) => {
       then: { title: 'heading' },
       else: { title: 'title' },
     },
-  ]
+  ];
   const data = {
     content: {
       heading: 'The heading',
@@ -286,10 +286,10 @@ test('should support $not', (t) => {
       section: 'sports',
       archived: false,
     },
-  }
-  const expected = { title: 'The heading' }
+  };
+  const expected = { title: 'The heading' };
 
-  const ret = mapTransform(def)(data)
+  const ret = mapTransform(def)(data);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});

@@ -10,9 +10,9 @@ import iterate from './iterate.js'
 const data = [
   { key: 'ent1', headline: 'Entry 1' },
   { key: 'ent2', headline: 'Entry 2' },
-]
+];
 
-const options = {}
+const options = {};
 
 // Tests
 
@@ -20,39 +20,39 @@ test('should map over a value array', (t) => {
   const def = {
     id: 'key',
     title: 'headline',
-  }
+  };
   const state = {
     context: [{ items: data }],
     value: data,
-  }
+  };
   const expected = {
     context: [{ items: data }],
     value: [
       { id: 'ent1', title: 'Entry 1' },
       { id: 'ent2', title: 'Entry 2' },
     ],
-  }
+  };
 
-  const ret = iterate(def)(options)(identity)(state)
+  const ret = iterate(def)(options)(identity)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should map over non-array', (t) => {
   const def = {
     id: 'key',
     title: 'headline',
-  }
+  };
   const state = {
     context: [],
     value: data[0],
-  }
-  const expectedValue = { id: 'ent1', title: 'Entry 1' }
+  };
+  const expectedValue = { id: 'ent1', title: 'Entry 1' };
 
-  const ret = iterate(def)(options)(identity)(state)
+  const ret = iterate(def)(options)(identity)(state);
 
-  t.deepEqual(ret.value, expectedValue)
-})
+  t.deepEqual(ret.value, expectedValue);
+});
 
 test('should provide array as context', (t) => {
   const def = {
@@ -60,52 +60,52 @@ test('should provide array as context', (t) => {
     title: 'headline',
     first: '^[0].key',
     tag: '^.^.section',
-  }
+  };
   const state = {
     context: [{ items: data, section: 'news' }],
     value: data,
-  }
+  };
   const expected = {
     context: [{ items: data, section: 'news' }],
     value: [
       { id: 'ent1', title: 'Entry 1', first: 'ent1', tag: 'news' },
       { id: 'ent2', title: 'Entry 2', first: 'ent1', tag: 'news' },
     ],
-  }
+  };
 
-  const ret = iterate(def)(options)(identity)(state)
+  const ret = iterate(def)(options)(identity)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should provide array as context through several iterations', (t) => {
   const def1 = {
     key: 'key',
     headline: 'key',
-  }
+  };
   const def2 = {
     id: 'key',
     title: 'headline',
     first: '^[0].key',
     tag: '^.^.section',
-  }
+  };
   const state = {
     context: [{ items: data, section: 'news' }],
     value: data,
-  }
+  };
   const expected = {
     context: [{ items: data, section: 'news' }],
     value: [
       { id: 'ent1', title: 'ent1', first: 'ent1', tag: 'news' },
       { id: 'ent2', title: 'ent2', first: 'ent1', tag: 'news' },
     ],
-  }
+  };
 
-  const ret1 = iterate(def1)(options)(identity)(state)
-  const ret2 = iterate(def2)(options)(identity)(ret1)
+  const ret1 = iterate(def1)(options)(identity)(state);
+  const ret2 = iterate(def2)(options)(identity)(ret1);
 
-  t.deepEqual(ret2, expected)
-})
+  t.deepEqual(ret2, expected);
+});
 
 test('should provide array as context through double arrays', (t) => {
   const def = {
@@ -119,14 +119,14 @@ test('should provide array as context through double arrays', (t) => {
         tag: '^.^.section',
       },
     ],
-  }
+  };
   const state = {
     context: [
       { entries: [{ items: data, section: 'news' }] },
       [{ items: data, section: 'news' }],
     ],
     value: [{ items: data, section: 'news' }],
-  }
+  };
   const expected = {
     ...state,
     value: [
@@ -137,24 +137,24 @@ test('should provide array as context through double arrays', (t) => {
         ],
       },
     ],
-  }
+  };
 
-  const ret = iterate(def)(options)(identity)(state)
+  const ret = iterate(def)(options)(identity)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should return undefined when no def', (t) => {
-  const def = {}
+  const def = {};
   const state = {
     context: [],
     value: data,
-  }
+  };
 
-  const ret = iterate(def)(options)(identity)(state)
+  const ret = iterate(def)(options)(identity)(state);
 
-  t.is(ret.value, undefined)
-})
+  t.is(ret.value, undefined);
+});
 
 test('should iterate context to support alt operation etc.', (t) => {
   const def = alt(
@@ -174,40 +174,40 @@ test('should iterate context to support alt operation etc.', (t) => {
             }`
           : ''
     )
-  )
+  );
   const state = {
     context: [],
     value: data,
-  }
+  };
   const expected = {
     context: [],
     value: ['From somewhere else', 'ent2: Entry 2'],
-  }
+  };
 
-  const ret = iterate(def)(options)(identity)(state)
+  const ret = iterate(def)(options)(identity)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
 test('should map over a value array in reverse', (t) => {
   const def = {
     key: 'id',
     headline: 'title',
-  }
+  };
   const state = {
     context: [],
     value: data,
     rev: true,
-  }
+  };
   const expected = {
     ...state,
     value: [
       { id: 'ent1', title: 'Entry 1' },
       { id: 'ent2', title: 'Entry 2' },
     ],
-  }
+  };
 
-  const ret = iterate(def)(options)(identity)(state)
+  const ret = iterate(def)(options)(identity)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});

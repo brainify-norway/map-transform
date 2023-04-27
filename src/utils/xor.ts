@@ -1,3 +1,3 @@
-export default function xor(a = false, b = false) {
-  return a ? !b : b
+export default function xor(a = false, b = false): boolean {
+  return a ? !b : b;
 }

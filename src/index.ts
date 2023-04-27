@@ -26,16 +26,14 @@ const mergeOptions = (options: Options) => ({
     ...transformers,
     ...(options.transformers || {}),
   },
-})
+});
 
 export default function mapTransform(
   def: TransformDefinition,
   options: Options = {}
 ): DataMapperEntry {
-  const completeOptions = mergeOptions(options)
-  const stateMapper = defToOperation(def)(completeOptions)(identity)
+  const completeOptions = mergeOptions(options);
+  const stateMapper = defToOperation(def)(completeOptions)(identity);
 
-  return function transform(data, initialState) {
-    return getStateValue(stateMapper(populateState(data, initialState || {})))
-  }
+  return (data, initialState) => getStateValue(stateMapper(populateState(data, initialState || {})));
 }

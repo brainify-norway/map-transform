@@ -5,30 +5,30 @@ import { State, InitialState } from '../types.js'
 export const pushContext = (state: State, value: unknown) => ({
   ...state,
   context: [...state.context, value],
-})
+});
 
 export const getLastContext = (state: State) =>
-  state.context[state.context.length - 1]
+  state.context[state.context.length - 1];
 
 export const removeLastContext = (state: State) => ({
   ...state,
   context: state.context.slice(0, -1),
-})
+});
 
 // Root
 
 export const getRootFromState = (state: State) =>
-  state.context.length === 0 ? state.value : state.context[0]
+  state.context.length === 0 ? state.value : state.context[0];
 
 // Target
 
-export const getTargetFromState = (state: State) => state.target
+export const getTargetFromState = (state: State) => state.target;
 
 export function setTargetOnState(state: State, target: unknown): State {
   return {
     ...state,
     target,
-  }
+  };
 }
 
 // State value
@@ -43,9 +43,9 @@ export const setStateValue = (
         ...pushContext(state, state.value),
         value,
       }
-    : { ...state, value }
+    : { ...state, value };
 
-export const getStateValue = (state: State): unknown => state.value
+export const getStateValue = (state: State): unknown => state.value;
 
 export const setValueFromState = (
   state: State,
@@ -55,17 +55,17 @@ export const setValueFromState = (
   ...state,
   value,
   context: shouldSetContext ? context : state.context,
-})
+});
 
-export const isNonvalue = (
+export const isNonValue = (
   value: unknown,
-  nonvalues: unknown[] = [undefined]
-) => nonvalues.includes(value)
+  nonValues: unknown[] = [undefined]
+) => nonValues.includes(value);
 
-export const isNonvalueState = (
+export const isNonValueState = (
   state: State,
-  nonvalues: unknown[] = [undefined]
-) => isNonvalue(state.value, nonvalues)
+  nonValues: unknown[] = [undefined]
+) => isNonValue(state.value, nonValues);
 
 // State
 
@@ -78,12 +78,12 @@ export const populateState = (
   target,
   rev,
   noDefaults,
-})
+});
 
 export const goForward = (state: State) => ({
   ...state,
   rev: false,
   flip: false,
-})
+});
 
-export const stopIteration = (state: State) => ({ ...state, iterate: false })
+export const stopIteration = (state: State) => ({ ...state, iterate: false });

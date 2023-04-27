@@ -12,33 +12,33 @@ export interface Dictionaries {
 // State type
 
 export interface InitialState {
-  target?: unknown
-  rev?: boolean
-  noDefaults?: boolean
+  target?: unknown;
+  rev?: boolean;
+  noDefaults?: boolean;
 }
 
 export interface State extends InitialState {
-  context: unknown[]
-  value: unknown
-  flip?: boolean
-  arr?: boolean
-  iterate?: boolean
-  index?: number
+  context: unknown[];
+  value: unknown;
+  flip?: boolean;
+  arr?: boolean;
+  iterate?: boolean;
+  index?: number;
 }
 
 // MapTransform options type
 
 export interface Options {
   transformers?: {
-    [key: string]: Transformer
-  }
+    [key: string]: Transformer;
+  };
   pipelines?: {
-    [key: string]: TransformDefinition
-  }
-  dictionaries?: Dictionaries
-  nonvalues?: unknown[]
-  fwdAlias?: string
-  revAlias?: string
+    [key: string]: TransformDefinition;
+  };
+  dictionaries?: Dictionaries;
+  nonvalues?: unknown[];
+  fwdAlias?: string;
+  revAlias?: string;
 }
 
 // Data mapper types
@@ -78,46 +78,46 @@ export interface Transformer<T = TransformerProps> {
 export type Path = string
 
 export interface TransformOperation extends TransformerProps {
-  $transform: string
-  $iterate?: boolean
-  $direction?: string
+  $transform: string;
+  $iterate?: boolean;
+  $direction?: string;
 }
 
 export interface FilterOperation extends TransformerProps {
-  $filter: string
-  $direction?: string
+  $filter: string;
+  $direction?: string;
 }
 
 export interface IfOperation extends TransformerProps {
-  $if: TransformDefinition
-  $direction?: string
-  then?: TransformDefinition
-  else?: TransformDefinition
+  $if: TransformDefinition;
+  $direction?: string;
+  then?: TransformDefinition;
+  else?: TransformDefinition;
 }
 
 export interface ApplyOperation extends TransformerProps {
-  $apply: string
-  $iterate?: boolean
-  $direction?: string
+  $apply: string;
+  $iterate?: boolean;
+  $direction?: string;
 }
 
 export interface AltOperation extends TransformerProps {
-  $alt: TransformDefinition[]
-  $iterate?: boolean
-  $direction?: string
-  $undefined?: unknown[]
+  $alt: TransformDefinition[];
+  $iterate?: boolean;
+  $direction?: string;
+  $undefined?: unknown[];
 }
 
 export interface MergeOperation extends TransformerProps {
-  $merge: unknown
-  $iterate?: boolean
-  $direction?: string
+  $merge: unknown;
+  $iterate?: boolean;
+  $direction?: string;
 }
 
 export interface ValueOperation extends TransformerProps {
-  $value: unknown
-  $iterate?: boolean
-  $direction?: string
+  $value: unknown;
+  $iterate?: boolean;
+  $direction?: string;
 }
 
 export interface AndOperation extends TransformerProps {
@@ -137,8 +137,8 @@ export interface ConcatOperation extends TransformerProps {
 }
 
 export interface LookupOperation extends TransformerProps {
-  $lookup: Path
-  path: Path
+  $lookup: Path;
+  path: Path;
 }
 
 export type OperationObject =
@@ -160,27 +160,26 @@ export type Pipeline = (
   | Operation
   | OperationObject
   | Path
-  | Pipeline
 )[]
 
 export interface TransformObject {
-  [key: string]: TransformDefinition | undefined | boolean
-  $iterate?: boolean
-  $modify?: boolean | Path
-  $noDefaults?: boolean
-  $flip?: boolean
+  [key: string]: TransformDefinition | undefined | boolean;
+  $iterate?: boolean;
+  $modify?: boolean | Path;
+  $noDefaults?: boolean;
+  $flip?: boolean;
   // The following props are included to make sure they don't appear on the TransformObject
-  $transform?: undefined
-  $filter?: undefined
-  $if?: undefined
-  $apply?: undefined
-  $value?: undefined
-  $alt?: undefined
-  $and?: undefined
-  $or?: undefined
-  $concat?: undefined
-  $lookup?: undefined
-  $merge?: undefined
+  $transform?: undefined;
+  $filter?: undefined;
+  $if?: undefined;
+  $apply?: undefined;
+  $value?: undefined;
+  $alt?: undefined;
+  $and?: undefined;
+  $or?: undefined;
+  $concat?: undefined;
+  $lookup?: undefined;
+  $merge?: undefined;
 }
 
 export type TransformDefinition =

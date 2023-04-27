@@ -4,14 +4,14 @@ import { defToOperation } from '../utils/definitionHelpers.js'
 import { identity } from '../utils/functional.js'
 
 const merge = <T, U>(left: T[], right: U | U[]) =>
-  Array.isArray(right) ? [...left, ...right] : [...left, right]
+  Array.isArray(right) ? [...left, ...right] : [...left, right];
 
 export default function concat(...defs: TransformDefinition[]): Operation {
   return (options) => (next) => {
-    const fns = defs.map((def) => defToOperation(def)(options)(identity))
+    const fns = defs.map((def) => defToOperation(def)(options)(identity));
 
     return function doConcat(state) {
-      const nextState = next(state)
+      const nextState = next(state);
       return setStateValue(
         nextState,
         fns
@@ -20,7 +20,7 @@ export default function concat(...defs: TransformDefinition[]): Operation {
             [] as unknown[]
           )
           .filter((val) => val !== undefined)
-      )
-    }
-  }
+      );
+    };
+  };
 }

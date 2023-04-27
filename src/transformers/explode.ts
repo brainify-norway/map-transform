@@ -1,40 +1,46 @@
-import { Transformer } from '../types.js'
-import { isObject } from '../utils/is.js'
+import { Transformer } from "../types.js"
+import { isObject } from "../utils/is.js"
 
 export interface KeyValue {
-  key: string | number
-  value: unknown
+  key: string | number;
+  value: unknown;
 }
 
 const isExplodedArray = (data: unknown[]) =>
   data.length > 0 &&
-  data.every((item) => isObject(item) && typeof item.key === 'number')
+  data.every((item) => {
+    if (isObject(item)) {
+      const keyValue = item as Record<string, unknown>;
+      return keyValue.key === "number";
+    }
+    return false;
+  });
 
 const setValueOnKey = (
   target: unknown[] | Record<string, unknown>,
   keyValue: unknown
 ) => {
   if (isObject(keyValue)) {
-    const { key, value } = keyValue
+    const { key, value } = keyValue as  Record<string, unknown >;
     if (Array.isArray(target)) {
-      target[key as number] = value
+      target[key as number] = value;
     } else {
-      target[String(key)] = value
+      target[String(key)] = value;
     }
   }
-  return target
-}
+  return target;
+};
 
-function doImplode(data: unknown) {
+function doImplode(data: unknown|unknown[]) {
   if (Array.isArray(data)) {
     return data.reduce(
       setValueOnKey,
       isExplodedArray(data)
         ? ([] as unknown[])
         : ({} as Record<string, unknown>)
-    )
+    );
   } else {
-    return undefined
+    return undefined;
   }
 }
 
@@ -45,20 +51,16 @@ function doExplode(data: unknown): unknown[] | undefined {
       .map(([key, value]: [string, unknown]) => ({
         key,
         value,
-      }))
+      }));
   } else if (Array.isArray(data)) {
-    return data.map((value: unknown, key: number) => ({ key, value }))
+    return data.map((value: unknown, key: number) => ({ key, value }));
   } else {
-    return undefined
+    return undefined;
   }
 }
 
-const explode: Transformer = function explode() {
-  return () => (data, state) => state.rev ? doImplode(data) : doExplode(data)
-}
+const explode: Transformer = () => () => (data, state) => state.rev ? doImplode(data) : doExplode(data);
 
-const implode: Transformer = function implode() {
-  return () => (data, state) => state.rev ? doExplode(data) : doImplode(data)
-}
+const implode: Transformer = () => () => (data, state) => state.rev ? doExplode(data) : doImplode(data);
 
 export { explode, implode }

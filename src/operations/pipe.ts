@@ -14,46 +14,46 @@ import { setValueFromState } from '../utils/stateHelpers.js'
 // rest of the pipeline, and then flattened – in the forward direction. Nothing
 // will happen in reverse.
 function splitArrayPaths(defs: Pipeline) {
-  const pipeline: Pipeline = []
+  const pipeline: Pipeline = [];
 
   for (const [index, step] of defs.entries()) {
     if (typeof step === 'string' && step.includes('[].')) {
-      const pos = step.indexOf('[].')
-      pipeline.push(step.slice(0, pos + 2))
+      const pos = step.indexOf('[].');
+      pipeline.push(step.slice(0, pos + 2));
       pipeline.push(
         divide(iterate([step.slice(pos + 3), ...defs.slice(index + 1)]), [
           step.slice(pos + 3),
           ...defs.slice(index + 1),
         ])
-      )
-      pipeline.push(fwd(transform(flatten({ depth: 1 }))))
-      break
+      );
+      pipeline.push(fwd(transform(flatten({ depth: 1 }))));
+      break;
     } else {
-      pipeline.push(step)
+      pipeline.push(step);
     }
   }
 
-  return pipeline
+  return pipeline;
 }
 
 export default function pipe(defs?: Pipeline): Operation {
   return (options) => {
     if (!Array.isArray(defs) || defs.length === 0) {
-      return identity
+      return identity;
     }
 
     const fns = splitArrayPaths(defs)
       .flat()
       .flatMap((def) => defToOperations(def))
-      .map((fn) => fn(options))
+      .map((fn) => fn(options));
 
     return (next) => {
-      const run = pipeFn(...fns)(next)
-      const runRev = composeFn(...fns)(next)
+      const run = pipeFn(...fns)(next);
+      const runRev = composeFn(...fns)(next);
       return function doPipe(state) {
-        const isRev = xor(state.rev, state.flip)
-        return setValueFromState(state, isRev ? runRev(state) : run(state))
-      }
-    }
-  }
+        const isRev = xor(state.rev, state.flip);
+        return setValueFromState(state, isRev ? runRev(state) : run(state));
+      };
+    };
+  };
 }

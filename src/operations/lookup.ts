@@ -12,15 +12,15 @@ import { identity } from '../utils/functional.js'
 import xor from '../utils/xor.js'
 
 export interface Props extends TransformerProps {
-  arrayPath: Path
-  propPath: Path
-  matchSeveral?: boolean
+  arrayPath: Path;
+  propPath: Path;
+  matchSeveral?: boolean;
 }
 
-const FLATTEN_DEPTH = 1
+const FLATTEN_DEPTH = 1;
 
 const flattenIfArray = (data: unknown) =>
-  Array.isArray(data) ? data.flat(FLATTEN_DEPTH) : data
+  Array.isArray(data) ? data.flat(FLATTEN_DEPTH) : data;
 
 const matchPropInArray =
   (getProp: DataMapper, matchSeveral: boolean) =>
@@ -28,23 +28,23 @@ const matchPropInArray =
   (value: string | number | boolean | null) =>
     matchSeveral
       ? arr.filter((obj) => getProp(obj, state) === value)
-      : arr.find((obj) => getProp(obj, state) === value)
+      : arr.find((obj) => getProp(obj, state) === value);
 
 const mapValue = (
   getArray: Operation,
   getProp: DataMapper,
   matchSeveral: boolean
 ) => {
-  const matchInArray = matchPropInArray(getProp, matchSeveral)
+  const matchInArray = matchPropInArray(getProp, matchSeveral);
   return (state: State) => {
     if (xor(state.rev, state.flip)) {
-      return (value: unknown) => getProp(value, { ...state, rev: false }) // Do a regular get, even though we're in rev
+      return (value: unknown) => getProp(value, { ...state, rev: false }); // Do a regular get, even though we're in rev
     } else {
-      const { value: arr } = getArray({})(identity)(state)
-      return arr ? matchInArray(arr as unknown[], state) : () => undefined
+      const { value: arr } = getArray({})(identity)(state);
+      return arr ? matchInArray(arr as unknown[], state) : () => undefined;
     }
-  }
-}
+  };
+};
 
 export default function lookup({
   arrayPath,
@@ -52,13 +52,13 @@ export default function lookup({
   matchSeveral = false,
 }: Props): Operation {
   return (options) => (next) => {
-    const getter = defToDataMapper(propPath, options)
-    const mapValueFn = mapValue(defToOperation(arrayPath), getter, matchSeveral)
+    const getter = defToDataMapper(propPath, options);
+    const mapValueFn = mapValue(defToOperation(arrayPath), getter, matchSeveral);
 
     return function doLookup(state) {
-      const nextState = next(state)
-      const matches = mapAny(mapValueFn(nextState), getStateValue(nextState))
-      return setStateValue(nextState, flattenIfArray(matches))
-    }
-  }
+      const nextState = next(state);
+      const matches = mapAny(mapValueFn(nextState), getStateValue(nextState));
+      return setStateValue(nextState, flattenIfArray(matches));
+    };
+  };
 }

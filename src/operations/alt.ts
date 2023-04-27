@@ -2,7 +2,7 @@ import { Operation, TransformDefinition } from '../types.js'
 import {
   setStateValue,
   getLastContext,
-  isNonvalueState,
+  isNonValueState as isNonvalueState,
   setValueFromState,
   removeLastContext,
 } from '../utils/stateHelpers.js'
@@ -12,39 +12,39 @@ import { identity } from '../utils/functional.js'
 const runAlt = (isOneMode: boolean) =>
   function runAlt(operation: Operation, index: number): Operation {
     return (options) => (next) => (state) => {
-      const nextState = next(state)
-      const { nonvalues } = options
-      const isFirst = !isOneMode && index === 0
+      const nextState = next(state);
+      const { nonvalues } = options;
+      const isFirst = !isOneMode && index === 0;
 
       if (isFirst) {
-        const thisState = operation(options)(identity)(nextState)
+        const thisState = operation(options)(identity)(nextState);
         return isNonvalueState(thisState, nonvalues)
           ? { ...thisState, context: [...nextState.context, nextState.value] }
-          : thisState
+          : thisState;
       } else {
         if (isNonvalueState(nextState, nonvalues)) {
           const thisState = operation(options)(identity)(
             removeLastContext(
               setStateValue(nextState, getLastContext(nextState))
             )
-          )
+          );
           return isNonvalueState(thisState, nonvalues)
             ? setValueFromState(nextState, thisState)
-            : thisState
+            : thisState;
         } else {
-          return nextState
+          return nextState;
         }
       }
-    }
-  }
+    };
+  };
 
 export default function alt(...defs: TransformDefinition[]): Operation[] {
   // Prepare all alt operations
-  const altOperations = defs.map((def) => defToOperation(def))
-  const isOneMode = altOperations.length === 1
+  const altOperations = defs.map((def) => defToOperation(def));
+  const isOneMode = altOperations.length === 1;
 
   // All alt operations are returned as individual operations, but the first one
   // is run in isolation (if it returns undefined, it will not polute the
   // context) and the rest are run only if the state value is not set
-  return altOperations.map(runAlt(isOneMode))
+  return altOperations.map(runAlt(isOneMode));
 }

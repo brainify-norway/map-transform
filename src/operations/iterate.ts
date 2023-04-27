@@ -12,9 +12,9 @@ import { identity } from '../utils/functional.js'
 
 export const iterateState =
   (fn: StateMapper) => (state: State, target: unknown) => {
-    const value = getStateValue(state)
+    const value = getStateValue(state);
     if (Array.isArray(value)) {
-      const nextState = pushContext(state, value)
+      const nextState = pushContext(state, value);
       return value.map((item, index) =>
         getStateValue(
           fn(
@@ -24,7 +24,7 @@ export const iterateState =
             )
           )
         )
-      )
+      );
     } else {
       return getStateValue(
         fn(
@@ -33,27 +33,27 @@ export const iterateState =
             indexOfIfArray(target, 0)
           )
         )
-      )
+      );
     }
-  }
+  };
 
 export default function iterate(def: TransformDefinition): Operation {
   if (!def || (typeof def === 'object' && Object.keys(def).length === 0)) {
     return (_options) => (next) => (state) =>
-      setStateValue(next(state), undefined)
+      setStateValue(next(state), undefined);
   }
-  const fn = defToOperation(def)
+  const fn = defToOperation(def);
 
   return (options) => {
-    const runIteration = iterateState(fn(options)(identity))
+    const runIteration = iterateState(fn(options)(identity));
     return (next) =>
       function doIterate(state) {
-        const nextState = next(state)
+        const nextState = next(state);
 
         return setStateValue(
           nextState,
           runIteration(nextState, getTargetFromState(nextState))
-        )
-      }
-  }
+        );
+      };
+  };
 }

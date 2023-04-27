@@ -9,12 +9,12 @@ import { identity } from '../utils/functional.js'
 
 function runCondition(conditionDef: DataMapper): Operation {
   return () => (next) => (state) => {
-    const nextState = next(state)
+    const nextState = next(state);
     return setStateValue(
       nextState,
       conditionDef(getStateValue(nextState), nextState)
-    )
-  }
+    );
+  };
 }
 
 export default function (
@@ -22,25 +22,25 @@ export default function (
   trueDef?: TransformDefinition,
   falseDef?: TransformDefinition
 ): Operation {
-  const falseFn = defToOperation(falseDef)
+  const falseFn = defToOperation(falseDef);
   if (!conditionDef) {
-    return falseFn
+    return falseFn;
   }
   const conditionFn: Operation =
     typeof conditionDef === 'function'
       ? runCondition(conditionDef as DataMapper) // We know to expect a datamapper here
-      : defToOperation(conditionDef)
-  const trueFn = defToOperation(trueDef)
+      : defToOperation(conditionDef);
+  const trueFn = defToOperation(trueDef);
 
   return (options) => (next) => {
-    const runCondition = conditionFn(options)(identity)
-    const runTrue = trueFn(options)(identity)
-    const runFalse = falseFn(options)(identity)
+    const runCondition = conditionFn(options)(identity);
+    const runTrue = trueFn(options)(identity);
+    const runFalse = falseFn(options)(identity);
 
     return (state) => {
-      const nextState = next(state)
-      const bool = getStateValue(runCondition(goForward(nextState)))
-      return bool ? runTrue(nextState) : runFalse(nextState)
-    }
-  }
+      const nextState = next(state);
+      const bool = getStateValue(runCondition(goForward(nextState)));
+      return bool ? runTrue(nextState) : runFalse(nextState);
+    };
+  };
 }

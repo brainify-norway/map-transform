@@ -1,20 +1,18 @@
-import { TransformerProps, Transformer } from '../types.js'
-import { defToDataMapper } from '../utils/definitionHelpers.js'
+import { TransformerProps, Transformer } from "../types.js"
+import { defToDataMapper } from "../utils/definitionHelpers.js"
 
 export interface Props extends TransformerProps {
   path?: string
 }
 
 const extractPath = (path: Props | string) =>
-  typeof path === 'string' ? path : path.path
+  typeof path === "string" ? path : path.path;
 
-const transformer: Transformer<Props | string> = function get(props) {
-  return (options) => {
-    const path = extractPath(props) || '.'
-    const getFn = defToDataMapper(path, options)
+const transformer: Transformer<Props | string> = props => (options) => {
+  const path = extractPath(props) || ".";
+  const getFn = defToDataMapper(path, options);
 
-    return getFn
-  }
-}
+  return getFn;
+};
 
 export default transformer
