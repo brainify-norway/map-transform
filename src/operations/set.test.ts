@@ -1,161 +1,161 @@
-import test from 'ava'
+import test from "ava"
 
-import { set } from './getSet'
+import { set } from "./getSet"
 
 // Setup
 
-const options = {}
+const options = {};
 
 // Tests
 
-test('should set value on path', t => {
-  const data = { user: 'johnf' }
+test("should set value on path", t => {
+  const data = { user: "johnf" };
   const state = {
     root: data,
     context: data,
-    value: 'johnf'
-  }
+    value: "johnf"
+  };
   const expected = {
     root: data,
     context: data,
-    value: { meta: { author: 'johnf' } }
-  }
-  const ret = set('meta.author')(options)(state)
+    value: { meta: { author: "johnf" } }
+  };
+  const ret = set("meta.author")(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should set value on [0] path', t => {
-  const data = { user: 'johnf' }
+test("should set value on [0] path", t => {
+  const data = { user: "johnf" };
   const state = {
     root: data,
     context: data,
-    value: 'johnf'
-  }
+    value: "johnf"
+  };
   const expected = {
     root: data,
     context: data,
-    value: ['johnf']
-  }
-  const ret = set('[0]')(options)(state)
+    value: ["johnf"]
+  };
+  const ret = set("[0]")(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should set value on [1] path', t => {
-  const data = { user: 'johnf' }
+test("should set value on [1] path", t => {
+  const data = { user: "johnf" };
   const state = {
     root: data,
     context: data,
-    value: 'johnf'
-  }
+    value: "johnf"
+  };
   const expected = {
     root: data,
     context: data,
-    value: [undefined, 'johnf']
-  }
-  const ret = set('[1]')(options)(state)
+    value: [undefined, "johnf"]
+  };
+  const ret = set("[1]")(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should not strip away star', t => {
+test("should not strip away star", t => {
   const state = {
-    root: { token: 's3cr3t' },
-    context: { token: 's3cr3t' },
-    value: 's3cr3t'
-  }
-  const expectedValue = { 's:header': { '*tu:api-key': 's3cr3t' } }
+    root: { token: "s3cr3t" },
+    context: { token: "s3cr3t" },
+    value: "s3cr3t"
+  };
+  const expectedValue = { 's:header': { '*tu:api-key': "s3cr3t" } };
 
-  const ret = set('s:header.*tu:api-key')(options)(state)
+  const ret = set("s:header.*tu:api-key")(options)(state);
 
-  t.deepEqual(ret.value, expectedValue)
-})
+  t.deepEqual(ret.value, expectedValue);
+});
 
-test('should set undefined', t => {
+test("should set undefined", t => {
   const state = {
     root: {},
     context: {},
     value: undefined
-  }
-  const expectedValue = { meta: { author: undefined } }
+  };
+  const expectedValue = { meta: { author: undefined } };
 
-  const ret = set('meta.author')(options)(state)
+  const ret = set("meta.author")(options)(state);
 
-  t.deepEqual(ret.value, expectedValue)
-})
+  t.deepEqual(ret.value, expectedValue);
+});
 
-test('should not set undefined when onlyMapped is true', t => {
+test("should not set undefined when onlyMapped is true", t => {
   const state = {
     root: {},
     context: {},
     value: undefined,
     onlyMapped: true
-  }
-  const expectedValue = undefined
+  };
+  const expectedValue = undefined;
 
-  const ret = set('meta.author')(options)(state)
+  const ret = set("meta.author")(options)(state);
 
-  t.deepEqual(ret.value, expectedValue)
-})
+  t.deepEqual(ret.value, expectedValue);
+});
 
-test('should not set undefined in array when onlyMapped is true', t => {
+test("should not set undefined in array when onlyMapped is true", t => {
   const state = {
     root: {},
     context: {},
-    value: [undefined, 'johnf'],
+    value: [undefined, "johnf"],
     onlyMapped: true
-  }
-  const expectedValue = [undefined, { meta: { author: 'johnf' } }]
+  };
+  const expectedValue = [undefined, { meta: { author: "johnf" } }];
 
-  const ret = set('meta.author')(options)(state)
+  const ret = set("meta.author")(options)(state);
 
-  t.deepEqual(ret.value, expectedValue)
-})
+  t.deepEqual(ret.value, expectedValue);
+});
 
-test('should get from path when reverse mapping', t => {
-  const data = { user: 'johnf' }
+test("should get from path when reverse mapping", t => {
+  const data = { user: "johnf" };
   const state = {
     root: data,
     context: data,
-    value: { meta: { author: 'johnf' } },
+    value: { meta: { author: "johnf" } },
     rev: true
-  }
+  };
   const expected = {
     root: data,
     context: data,
-    value: 'johnf',
+    value: "johnf",
     rev: true,
     arr: false
-  }
-  const ret = set('meta.author')(options)(state)
+  };
+  const ret = set("meta.author")(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should not set on root path', t => {
+test("should not set on root path", t => {
   const state = {
-    root: { section: 'news', items: [{ id: 'no1' }] },
-    context: { id: 'no1' },
-    value: { id: 'no1' }
-  }
-  const expectedValue = undefined
+    root: { section: "news", items: [{ id: "no1" }] },
+    context: { id: "no1" },
+    value: { id: "no1" }
+  };
+  const expectedValue = undefined;
 
-  const ret = set('$section')(options)(state)
+  const ret = set("$section")(options)(state);
 
-  t.deepEqual(ret.value, expectedValue)
-})
+  t.deepEqual(ret.value, expectedValue);
+});
 
-test('should get from root path', t => {
+test("should get from root path", t => {
   const state = {
-    root: { section: 'news', items: [{ id: 'no1' }] },
-    context: { id: 'no1' },
-    value: { id: 'no1' },
+    root: { section: "news", items: [{ id: "no1" }] },
+    context: { id: "no1" },
+    value: { id: "no1" },
     rev: true
-  }
-  const expectedValue = 'news'
+  };
+  const expectedValue = "news";
 
-  const ret = set('$section')(options)(state)
+  const ret = set("$section")(options)(state);
 
-  t.deepEqual(ret.value, expectedValue)
-})
+  t.deepEqual(ret.value, expectedValue);
+});

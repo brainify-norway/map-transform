@@ -1,80 +1,80 @@
-import test from 'ava'
-import { State, Options } from '../types'
+import test from "ava"
+import { IState as State, IOptions as Options } from "../types"
 
-import alt from './alt'
+import alt from "./alt"
 
 // Helpers
 
-const getUser = (_options: Options) => (state: State) => ({ ...state, value: (state.value as any).user })
+const getUser = (_options: Options) => (state: State) => ({ ...state, value: (state.value as any).user });
 
-const options = {}
+const options = {};
 
 // Tests
 
-test('should set alt value when value is undefined', (t) => {
+test("should set alt value when value is undefined", (t) => {
   const state = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
+    root: { user: "johnf" },
+    context: { user: "johnf" },
     value: undefined
-  }
+  };
   const expected = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
-    value: 'johnf'
-  }
+    root: { user: "johnf" },
+    context: { user: "johnf" },
+    value: "johnf"
+  };
 
-  const ret = alt(getUser)(options)(state)
+  const ret = alt(getUser)(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should do nothing when value is set', (t) => {
+test("should do nothing when value is set", (t) => {
   const state = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
-    value: 'maryk'
-  }
+    root: { user: "johnf" },
+    context: { user: "johnf" },
+    value: "maryk"
+  };
   const expected = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
-    value: 'maryk'
-  }
+    root: { user: "johnf" },
+    context: { user: "johnf" },
+    value: "maryk"
+  };
 
-  const ret = alt(getUser)(options)(state)
+  const ret = alt(getUser)(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should treat string as path', (t) => {
+test("should treat string as path", (t) => {
   const state = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
+    root: { user: "johnf" },
+    context: { user: "johnf" },
     value: undefined
-  }
+  };
   const expected = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
-    value: 'johnf'
-  }
+    root: { user: "johnf" },
+    context: { user: "johnf" },
+    value: "johnf"
+  };
 
-  const ret = alt('user')(options)(state)
+  const ret = alt("user")(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should treat array as map pipe', (t) => {
+test("should treat array as map pipe", (t) => {
   const state = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
+    root: { user: "johnf" },
+    context: { user: "johnf" },
     value: undefined
-  }
+  };
   const expected = {
-    root: { user: 'johnf' },
-    context: { user: 'johnf' },
-    value: 'johnf'
-  }
+    root: { user: "johnf" },
+    context: { user: "johnf" },
+    value: "johnf"
+  };
 
-  const ret = alt(['user'])(options)(state)
+  const ret = alt(["user"])(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});

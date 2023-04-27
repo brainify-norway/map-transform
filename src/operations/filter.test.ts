@@ -1,70 +1,70 @@
-import test from 'ava'
-import { Data } from '../types'
+import test from "ava"
+import { Data } from "../types"
 
-import filter from './filter'
+import filter from "./filter"
 
 // Helpers
 
-const beginsWithA = (str: Data) => (typeof str === 'string') ? str.startsWith('A') : false
+const beginsWithA = (str: Data) => (typeof str === "string") ? str.startsWith("A") : false;
 
-const options = {}
+const options = {};
 
 // Tests
 
-test('should set value to undefined when filter returns false', (t) => {
+test("should set value to undefined when filter returns false", (t) => {
   const state = {
-    root: { title: 'Other entry' },
-    context: { title: 'Other entry' },
-    value: 'Other entry'
-  }
+    root: { title: "Other entry" },
+    context: { title: "Other entry" },
+    value: "Other entry"
+  };
   const expected = {
-    root: { title: 'Other entry' },
-    context: { title: 'Other entry' },
+    root: { title: "Other entry" },
+    context: { title: "Other entry" },
     value: undefined
-  }
+  };
 
-  const ret = filter(beginsWithA)(options)(state)
+  const ret = filter(beginsWithA)(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should not touch value when filter returns true', (t) => {
+test("should not touch value when filter returns true", (t) => {
   const state = {
-    root: { title: 'An entry' },
-    context: { title: 'An entry' },
-    value: 'An entry'
-  }
+    root: { title: "An entry" },
+    context: { title: "An entry" },
+    value: "An entry"
+  };
 
-  const ret = filter(beginsWithA)(options)(state)
+  const ret = filter(beginsWithA)(options)(state);
 
-  t.deepEqual(ret, state)
-})
+  t.deepEqual(ret, state);
+});
 
-test('should remove values in array when filter returns false', (t) => {
+test("should remove values in array when filter returns false", (t) => {
   const state = {
-    root: { users: ['John F', 'Andy'] },
-    context: { users: ['John F', 'Andy'] },
-    value: ['John F', 'Andy']
-  }
+    root: { users: ["John F", "Andy"] },
+    context: { users: ["John F", "Andy"] },
+    value: ["John F", "Andy"]
+  };
   const expected = {
-    root: { users: ['John F', 'Andy'] },
-    context: { users: ['John F', 'Andy'] },
-    value: ['Andy']
-  }
+    root: { users: ["John F", "Andy"] },
+    context: { users: ["John F", "Andy"] },
+    value: ["Andy"]
+  };
 
-  const ret = filter(beginsWithA)(options)(state)
+  const ret = filter(beginsWithA)(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should not touch value when filter is not a function', (t) => {
+test("should not touch value when filter is not a function", (t) => {
   const state = {
-    root: { title: 'An entry' },
-    context: { title: 'An entry' },
-    value: 'An entry'
-  }
+    root: { title: "An entry" },
+    context: { title: "An entry" },
+    value: "An entry"
+  };
 
-  const ret = filter('notallowed' as any)(options)(state)
+  const ret = filter("notallowed" as any)(options)(state);
 
-  t.deepEqual(ret, state)
-})
+  t.deepEqual(ret, state);
+});

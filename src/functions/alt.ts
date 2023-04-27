@@ -1,4 +1,4 @@
-import { Data, Operands, Context } from '../types'
+import { Data, IOperands as Operands, IContext as Context } from "../types"
 
 interface Options extends Operands {
   // path?: string
@@ -7,7 +7,7 @@ interface Options extends Operands {
 
 export default function alt({ value }: Options) {
   return (data: Data, context?: Context) => {
-    const { onlyMappedValues = false } = context || {}
-    return typeof data === 'undefined' && !onlyMappedValues ? value : data
-  }
+    const { onlyMappedValues = false } = context || {};
+    return typeof data === "undefined" && !onlyMappedValues ? value : data;
+  };
 }

@@ -1,45 +1,45 @@
-import test from 'ava'
+import test from "ava"
 
-import value from './value'
+import value from "./value"
 
 // Setup
 
-const options = {}
+const options = {};
 
 // Tests
 
-test('should set value', (t) => {
+test("should set value", (t) => {
   const state = {
     root: {},
     context: {},
-    value: 'Something'
-  }
+    value: "Something"
+  };
   const expected = {
     root: {},
     context: {},
-    value: 'Splendid!'
-  }
+    value: "Splendid!"
+  };
 
-  const ret = value('Splendid!')(options)(state)
+  const ret = value("Splendid!")(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});
 
-test('should not set value when onlyMapped', (t) => {
+test("should not set value when onlyMapped", (t) => {
   const state = {
     root: {},
     context: {},
-    value: 'Something',
+    value: "Something",
     onlyMapped: true
-  }
+  };
   const expected = {
     root: {},
     context: {},
     value: undefined,
     onlyMapped: true
-  }
+  };
 
-  const ret = value('Splendid!')(options)(state)
+  const ret = value("Splendid!")(options)(state);
 
-  t.deepEqual(ret, expected)
-})
+  t.deepEqual(ret, expected);
+});

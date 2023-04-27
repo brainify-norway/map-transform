@@ -1,86 +1,86 @@
-export interface ObjectWithProps {
+export interface IObjectWithProps {
   [key: string]: Data
 }
 
-export type Prop = string | number | boolean | object | null | undefined | ObjectWithProps
+export type Prop = string | number | boolean | object | null | undefined | IObjectWithProps
 
 export type Data = Prop | Prop[]
 
 export type Path = string
 
-export interface Operands {
+export interface IOperands {
   [key: string]: Data
 }
 
-export interface Context {
+export interface IContext {
   rev: boolean,
-  onlyMappedValues: boolean
+  onlyMappedValues: boolean;
 }
 
-export interface DataMapper<U = Data, V = Data | boolean> {
-  (data: U, context: Context): V
+export interface IDataMapper<TU = Data, TV = Data | boolean> {
+  (data: TU, context: IContext): TV
 }
 
-export interface CustomFunction<T = Operands, U = Data, V = Data | boolean> {
-  (operands: T): DataMapper<U, V>
+export interface ICustomFunction<T = IOperands, TU = Data, TV = Data | boolean> {
+  (operands: T): IDataMapper<TU, TV>
 }
 
-export interface CustomFunctions {
-  [key: string]: CustomFunction
+export interface ICustomFunctions {
+  [key: string]: ICustomFunction
 }
 
-export interface State {
+export interface IState {
   root: Data,
   context: Data,
   value: Data,
   rev?: boolean,
   onlyMapped?: boolean,
-  arr?: boolean
+  arr?: boolean;
 }
 
-export interface Options {
-  customFunctions?: CustomFunctions
+export interface IOptions {
+  customFunctions?: ICustomFunctions
 }
 
-export interface TransformObject extends Operands {
+export interface ITransformObject extends IOperands {
   $transform: string
 }
 
-export interface FilterObject extends Operands {
+export interface IFilterObject extends IOperands {
   $filter: string
 }
 
-export type OperationObject = TransformObject | FilterObject
+export type OperationObject = ITransformObject | IFilterObject
 
-export interface StateMapper {
-  (state: State): State
+export interface IStateMapper {
+  (state: IState): IState
 }
 
-export interface Operation {
-  (options: Options): StateMapper
+export interface IOperation {
+  (options: IOptions): IStateMapper
 }
 
-export interface MapFunction {
-  (options: Options): (state: State) => State
+export interface IMapFunction {
+  (options: IOptions): (state: IState) => IState
 }
 
-type MapPipeSimple = (MapObject | Operation | OperationObject | Path)[]
+type MapPipeSimple = (IMapObject | IOperation | OperationObject | Path)[]
 
-export type MapPipe = (MapObject | Operation | OperationObject | Path | MapPipeSimple)[]
+export type MapPipe = (IMapObject | IOperation | OperationObject | Path | MapPipeSimple)[]
 
-export interface MapObject {
+export interface IMapObject {
   [key: string]: MapDefinition | undefined,
   $transform?: undefined,
-  $filter?: undefined
+  $filter?: undefined;
 }
 
-export type MapDefinition = MapObject | Operation | OperationObject | MapPipe | Path | null
+export type MapDefinition = IMapObject | IOperation | OperationObject | MapPipe | Path | null
 
-export interface MapTransformWithOnlyMappedValues {
-  (data: Data): Data
-  onlyMappedValues: (data: Data) => Data
+export interface IMapTransformWithOnlyMappedValues {
+  (data: Data): Data;
+  onlyMappedValues: (data: Data) => Data;
 }
 
-export interface MapTransform extends MapTransformWithOnlyMappedValues {
-  rev: MapTransformWithOnlyMappedValues
+export interface IMapTransform extends IMapTransformWithOnlyMappedValues {
+  rev: IMapTransformWithOnlyMappedValues
 }

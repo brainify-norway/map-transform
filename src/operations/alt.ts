@@ -1,36 +1,36 @@
-import mapAny = require('map-any')
+import mapAny = require("map-any")
 import {
-  State,
+  IState as State,
   Data,
-  Operation,
-  StateMapper,
+  IOperation as Operation,
+  IStateMapper as StateMapper,
   MapDefinition,
-  Options
-} from '../types'
-import { setStateValue, getStateValue } from '../utils/stateHelpers'
-import { mapFunctionFromDef } from '../utils/definitionHelpers'
+  IOptions as Options
+} from "../types"
+import { setStateValue, getStateValue } from "../utils/stateHelpers"
+import { mapFunctionFromDef } from "../utils/definitionHelpers"
 
 const getOne = (context: Data | Data[], index?: number) =>
-  typeof index === 'undefined' || !Array.isArray(context)
-    ? context
-    : context[index]
+  typeof index === "undefined" || !Array.isArray(context)
+  ? context
+  : context[index];
 
 const getValueOrDefault = (state: State, runAlt: StateMapper) => (
-  value: Data,
-  index?: number
-) =>
-  typeof value === 'undefined'
-    ? getStateValue(runAlt({ ...state, value: getOne(state.context, index) }))
-    : value
+    value: Data,
+    index?: number
+  ) =>
+  typeof value === "undefined"
+  ? getStateValue(runAlt({ ...state, value: getOne(state.context, index) }))
+  : value;
 
 export default function alt(fn: MapDefinition): Operation {
   return (options: Options) => {
-    const runAlt = mapFunctionFromDef(fn, options)
+    const runAlt = mapFunctionFromDef(fn, options);
 
     return (state: State) =>
       setStateValue(
         state,
         mapAny(getValueOrDefault(state, runAlt), state.value)
-      )
-  }
+      );
+  };
 }
